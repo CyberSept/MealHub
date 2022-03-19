@@ -1,0 +1,132 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 92%;
+    background: rgb(238, 238, 238) !important;
+}
+.navbar{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.user_card {
+    width: 600px;
+    margin-top: auto;
+    margin-bottom: auto;
+    background: white;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 50px;
+    color: #797979;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
+
+}
+
+.form_container {
+    margin-top: 20px;
+}
+
+#form-title{
+    color: #fff;
+}
+
+.login_container {
+    padding: 0 2rem;
+}
+
+.input-group-text {
+    width: 40px;
+    background: #797979 !important;
+    color: white !important;
+    border: 0 !important;
+    border-radius: 0.25rem 0 0 0.25rem !important;
+}
+
+.input_user, .input_pass:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+
+#form-title{
+    color: #797979;
+}
+
+#messages{
+    background-color: #797979;
+    color: #fff;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+#detailinput {
+    font-size: 20px;
+    border-radius: 10px;
+    background-color: white;
+    padding: 20px;
+}
+
+
+.arbtn {
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  outline: 0;
+}
+
+svg {
+  padding: 5px;
+}
+
+.arrow {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  margin-top: -45px;
+  margin-left: -35px;
+  width: 70px;
+  height: 90px;
+}
+
+.left {
+  left: 42%;
+}
+
+.right {
+  left: 58%;
+}
+
+.left:hover polyline,
+.left:focus polyline {
+  stroke-width: 3;
+}
+
+.left:active polyline {
+  stroke-width: 6;
+  transition: all 100ms ease-in-out;
+}
+
+polyline {
+  transition: all 250ms ease-in-out;
+}
+
+.review-info {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.edit-btn{
+	background: none;
+	color: #007bff;
+	border: none;
+	padding: 0;
+    margin-left: 10px;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+    font-size: 14px;
+}

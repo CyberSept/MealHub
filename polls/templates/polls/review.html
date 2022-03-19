@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container h-100">
+        <div class="d-flex justify-content-center h-100">
+            <div class="user_card">
+                <div class="d-flex justify-content-center">
+
+                    <h3 id="form-title">გადახედე</h3>
+
+                </div>
+                <div class="row justify-content-center mt-5">
+                    <p>ობიექტი: <span class="review-info">{{ order_details.meal.food_item }}</span>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <button type="submit" class="edit-btn" name="edit" value="food">შეცვლა</button>
+                    </form>
+                    </p>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <p>დეტალები: <span class="review-info">{{ order_details.note }}</span>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <button type="submit" class="edit-btn" name="edit" value="menu">შეცვლა</button>
+                    </form>
+                    </p>
+                </div>
+
+                <div class="row justify-content-center mt-3">
+                    <p>
+                        {% if order_details.out %}
+                            მირჩევნია გასვლა
+                        {% else %}
+                            მირჩევნია გამოძახება
+                        {% endif %}
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <button type="submit" class="edit-btn" name="edit" value="out">შეცვლა</button>
+                    </form>
+
+                    </p>
+                </div>
+
+                {% if not order_details.out %}
+                    <div class="row justify-content-center mt-3">
+                        <p>
+
+
+                            {% if order_details.orderer %}
+                                შემიძლია მე გამოვიძახო
+                            {% else %}
+                                სხვამ გამოიძახოს
+                            {% endif %}
+
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <button type="submit" class="edit-btn" name="edit" value="orderer">შეცვლა</button>
+                        </form>
+
+
+                        </p>
+                    </div>
+                {% endif %}
+
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="row justify-content-center mt-3">
+                        <button class="btn btn-danger" type="submit" name="action" value="in">სწორია</button>
+                    </div>
+                </form>
+                {% include 'polls/components/clear_query.html' %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
 from polls.models import Food, Poll
 
 
 def home(request):
-    meals = Poll.objects.exclude(meal__isnull=True).count()
-    context = {'meals': meals}
+    food_ids = Poll.objects.values_list('meal', flat=True).distinct()
+    food = Food.objects.filter(id__in=food_ids)
+
+    context = {'meals': food}
     return render(request, 'polls/home.html', context)
 
 
@@ -32,7 +35,7 @@ def out_or_in(request):
     if request.method == 'POST':
         poll = Poll.objects.filter(user=request.user.id)
         if request.POST.get('action') == 'out':
-            poll.update(out=1, orderer=None)
+            poll.update(out=1)
         else:
             poll.update(out=0)
         return redirect('orderer')
@@ -43,9 +46,8 @@ def out_or_in(request):
 @login_required(login_url='login')
 def orderer(request):
     query = Poll.objects.get(user=request.user)
-    print(query.out)
 
-    if query.orderer is not None or query.out:
+    if query.orderer is not None:
         return redirect('food_choice')
 
     if request.method == 'POST':
@@ -71,9 +73,14 @@ def food_choice(request):
     context = {'food': food, 'order': order}
 
     if request.method == 'POST':
+        food_input = request.POST.get('add-food')
         poll = Poll.objects.filter(user=request.user)
+        if food_input != '' and food_input is not None:
+            food_list = Food.objects.create(food_item=food_input)
+            poll.update(meal=food_list.id)
+        else:
+            poll.update(meal=request.POST.get('food'))
 
-        poll.update(meal=request.POST.get('food'))
         return redirect('order_menu')
 
     return render(request, 'polls/food_choice.html', context)
@@ -97,21 +104,28 @@ def order_menu(request):
 @login_required(login_url='login')
 def review(request):
     query = Poll.objects.filter(user=request.user)
-
-    if request.POST.get('edit') == 'food':
+    edit = request.POST.get('edit')
+    error = None
+    if edit == 'food':
         query.update(meal=None, note=None)
         return redirect('food_choice')
-    elif request.POST.get('edit') == 'menu':
+    elif edit == 'menu':
         query.update(note=None)
         return redirect('order_menu')
-    elif request.POST.get('edit') == 'out':
+    elif edit == 'out':
         query.update(out=None)
         return redirect('out_or_in')
-    elif request.POST.get('edit') == 'orderer':
+    elif edit == 'orderer':
         query.update(orderer=None)
         return redirect('orderer')
 
-    context = {'order_details': query[0]}
+    if request.POST.get('action') == 'submit':
+        if query[0].meal is not None and query[0].note is not None and \
+                query[0].out is not None and query[0].orderer is not None:
+            return redirect('home')
+        else:
+            error = 'Some info is missing! Please complete!'
+    context = {'order_details': query[0], 'error': error}
     return render(request, 'polls/review.html', context)
 
 

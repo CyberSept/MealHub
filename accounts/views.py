@@ -1,9 +1,14 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 
-from .forms import CreateUserForm
+from .forms import CreateUserForm, UpdateUserForm
+
+
 # Create your views here.
 
 
@@ -53,8 +58,21 @@ def logout_user(request):
 
 @login_required(login_url='login')
 def profile_page(request):
-    context = {}
+    if request.method == 'POST':
+        user_form = UpdateUserForm(request.POST, instance=request.user)
+
+        if user_form.is_valid():
+            user_form.save()
+            messages.success(request, 'Profile has been updated')
+            return redirect('profile')
+    else:
+        user_form = UpdateUserForm(instance=request.user)
+
+    context = {'user_form': user_form}
     return render(request, 'accounts/profile.html', context)
 
 
-
+class ChangePass(SuccessMessageMixin, PasswordChangeView):
+    template_name = 'accounts/change_password.html'
+    success_message = 'Successfully changed your password'
+    success_url = reverse_lazy('profile')

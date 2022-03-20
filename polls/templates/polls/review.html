@@ -34,6 +34,7 @@
                         {% else %}
                             მირჩევნია გამოძახება
                         {% endif %}
+
                     <form method="POST" action="">
                         {% csrf_token %}
                         <button type="submit" class="edit-btn" name="edit" value="out">შეცვლა</button>
@@ -42,31 +43,31 @@
                     </p>
                 </div>
 
-                {% if not order_details.out %}
-                    <div class="row justify-content-center mt-3">
-                        <p>
+                <div class="row justify-content-center mt-3">
+                    <p>
+                        {% if order_details.orderer %}
+                            შემიძლია ვიკისრო
+                        {% else %}
+                            სხვამ იკისროს
+                        {% endif %}
 
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <button type="submit" class="edit-btn" name="edit" value="orderer">შეცვლა</button>
+                    </form>
 
-                            {% if order_details.orderer %}
-                                შემიძლია მე გამოვიძახო
-                            {% else %}
-                                სხვამ გამოიძახოს
-                            {% endif %}
+                    </p>
+                </div>
 
-                        <form method="POST" action="">
-                            {% csrf_token %}
-                            <button type="submit" class="edit-btn" name="edit" value="orderer">შეცვლა</button>
-                        </form>
-
-
-                        </p>
-                    </div>
+                {% if error %}
+                    <p id="messages">{{ error }}</p>
                 {% endif %}
+
 
                 <form method="POST" action="">
                     {% csrf_token %}
                     <div class="row justify-content-center mt-3">
-                        <button class="btn btn-danger" type="submit" name="action" value="in">სწორია</button>
+                        <button class="btn btn-danger" type="submit" name="action" value="submit">სწორია</button>
                     </div>
                 </form>
                 {% include 'polls/components/clear_query.html' %}

@@ -1,5 +1,7 @@
 from django.forms import ModelForm, TextInput, EmailInput, PasswordInput, CharField
 from django.contrib.auth.forms import UserCreationForm
+from django import forms
+
 from .models import UserModel
 
 
@@ -57,3 +59,15 @@ class CreateUserForm(UserCreationForm):
             #     'placeholder': 'Email'
             # })
         }
+
+
+class UpdateUserForm(forms.ModelForm):
+    username = forms.CharField(max_length=100,
+                               required=True,
+                               widget=forms.TextInput(attrs={
+                                   'class': 'form-control'
+                               }))
+
+    class Meta:
+        model = UserModel
+        fields = ['username']

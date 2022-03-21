@@ -6,10 +6,41 @@ from polls.models import Food, Poll
 
 
 def home(request):
-    food_ids = Poll.objects.values_list('meal', flat=True).distinct()
-    food = Food.objects.filter(id__in=food_ids)
+    # out_food_ids = Poll.objects.filter(out=True).values_list('meal', flat=True)
+    # in_food_ids = Poll.objects.filter(out=False).values_list('meal', flat=True)
+    #
+    # temp_dict = {}
+    # temp_list = []
+    #
+    # for i in range(len(out_food_ids)):
+    #     # print(Food.objects.get(id=food_ids[i]), Poll.objects.filter(meal=food_ids[i]))
+    #     if Food.objects.get(id=out_food_ids[i]) not in temp_list:
+    #         temp_list.append(Food.objects.get(id=out_food_ids[i]))
+    #         temp_dict[Poll.objects.filter(meal=out_food_ids[i]).filter(out=True).distinct()] = Food.objects.get(id=out_food_ids[i])
+    #
+    # temp_list2 = []
+    # for i in range(len(in_food_ids)):
+    #     # print(Food.objects.get(id=food_ids[i]), Poll.objects.filter(meal=food_ids[i]))
+    #     if Food.objects.get(id=out_food_ids[i]) not in temp_list2:
+    #         temp_list2.append(Food.objects.get(id=out_food_ids[i]))
+    #         temp_dict[Poll.objects.filter(meal=in_food_ids[i]).filter(out=False).distinct()] = Food.objects.get(id=in_food_ids[i])
 
-    context = {'meals': food}
+
+    food_dict = {}
+    food_ids = Poll.objects.values_list('meal', flat=True).distinct()
+
+    print(food_dict)
+    for i in range(len(food_ids)):
+        food_dict[Food.objects.get(id=food_ids[i])] = Poll.objects.filter(meal=food_ids[i])
+
+    if request.method == 'POST':
+        Poll.objects.update_or_create(user=request.user)
+        query = Poll.objects.filter(user=request.user)
+        if query[0].meal_id != int(request.POST.get('food')):
+            query.update(meal=request.POST.get('food'), note='', out=request.POST.get('out'))
+            return redirect('orderer')
+
+    context = {'food': food_dict}
     return render(request, 'polls/home.html', context)
 
 

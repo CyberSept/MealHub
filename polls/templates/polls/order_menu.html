@@ -16,7 +16,7 @@
                 <div class="d-flex justify-content-center form_container">
                     <form method="POST" action="">
                         {% csrf_token %}
-                        <textarea required name="text" placeholder="შეიყვანეთ ტექსტი..." id="detailinput" rows="5"
+                        <textarea name="text" placeholder="შეიყვანეთ ტექსტი..." id="detailinput" rows="5"
                                   cols="30"></textarea>
 
                         <button class="btn btn-danger btn-block mt-2" type="submit">Submit</button>

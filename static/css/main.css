@@ -4,9 +4,11 @@ body, html {
     height: 92%;
     background: rgb(238, 238, 238) !important;
 }
-.navbar{
+
+.navbar {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
 .user_card {
     width: 600px;
     margin-top: auto;
@@ -25,7 +27,23 @@ body, html {
 }
 
 .home-card {
-    width: auto;
+    width: 270px;
+    margin-top: 70px;
+    transition: transform .3s;
+}
+
+@media (min-width: 1200px){
+.container {
+    max-width: 1700px;
+}
+}
+.home-card:hover {
+    transform: scale(1.1);
+}
+
+.home-btn:focus {
+    outline: none !important;
+    border: none transparent !important;
 }
 
 /*.home-card-wrap {*/
@@ -36,7 +54,7 @@ body, html {
     margin-top: 20px;
 }
 
-#form-title{
+#form-title {
     color: #fff;
 }
 
@@ -57,11 +75,11 @@ body, html {
     outline: 0px !important;
 }
 
-#form-title{
+#form-title {
     color: #797979;
 }
 
-#messages{
+#messages {
     background-color: #797979;
     color: #fff;
     padding: 10px;
@@ -77,63 +95,35 @@ body, html {
     padding: 20px;
 }
 
-
-.arbtn {
-  -webkit-appearance: none;
-  background: transparent;
-  border: 0;
-  outline: 0;
-}
-
-svg {
-  padding: 5px;
-}
-
-.arrow {
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  margin-top: -45px;
-  margin-left: -35px;
-  width: 70px;
-  height: 90px;
-}
-
-.left {
-  left: 42%;
-}
-
-.right {
-  left: 58%;
-}
-
-.left:hover polyline,
-.left:focus polyline {
-  stroke-width: 3;
-}
-
-.left:active polyline {
-  stroke-width: 6;
-  transition: all 100ms ease-in-out;
-}
-
-polyline {
-  transition: all 250ms ease-in-out;
-}
-
 .review-info {
     font-size: 20px;
     font-weight: bold;
 }
 
-.edit-btn{
-	background: none;
-	color: #007bff;
-	border: none;
-	padding: 0;
+.edit-btn {
+    background: none;
+    color: #007bff;
+    border: none;
+    padding: 0;
     margin-left: 10px;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
     font-size: 14px;
+}
+
+.home-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 10px;
+    font: inherit;
+    cursor: pointer;
+    outline: none;
+    font-size: 14px;
+}
+
+.btn-hungry {
+    width: 80px;
+    margin: 0 5px;
 }

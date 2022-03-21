@@ -1,13 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for meal in meals %}
-        <p>{{ meal }}</p>
-        <p>{{ meal.poll.annotate.count }}</p>
-        {% for user in meal.poll.annotate %}
-            <p>{{ user }}</p>
-        {% endfor %}
-        <hr>
-        <br>
-    {% endfor %}
+
+
+    <div class="container h-50">
+        <div class="home-card-wrap d-flex flex-wrap justify-content-around h-100">
+            {% for meal in meals %}
+
+                <div class="user_card home-card">
+                    <div class="d-flex justify-content-center">
+                        {{ meal.poll.annotate.count }}
+                    </div>
+                    <div class="d-flex justify-content-center mb-4">
+
+                        <h3 id="form-title">{{ meal }}</h3>
+
+                    </div>
+                    {% for user in meal.poll.annotate %}
+                        <div class="d-flex justify-content-center">
+                            <p>{{ user }}</p>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
 {% endblock %}

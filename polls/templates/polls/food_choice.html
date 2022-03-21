@@ -24,7 +24,7 @@
                             </select>
 
                             <div id="food-choice" class="row justify-content-center mt-3">
-                                <a href="#" onclick="myFunction()">დამატება</a>
+                                <a href="#" onclick="custom_food()">დამატება</a>
                             </div>
 
                         <div hidden id="food-input" class="row justify-content-center mt-3">
@@ -51,7 +51,7 @@
     </div>
 
     <script>
-        function myFunction() {
+        function custom_food() {
             document.getElementById("select").required = false;
             document.getElementById("food-choice").hidden = true;
             document.getElementById("food-input").hidden = false;

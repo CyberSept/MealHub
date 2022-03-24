@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container h-100">
+        <div class="d-flex justify-content-center h-100">
+            <div class="user_card">
+                {% for error in errors %}
+                    <p id="messages">{{ error }}</p>
+                {% endfor %}
+                <div class="d-flex justify-content-center">
+
+                    <h3 id="form-title">აირჩიე</h3>
+
+                </div>
+
+                <form method="POST" action="">
+                    {% csrf_token %}
+
+                    <div class="d-flex justify-content-center mt-4">
+                        <span>
+                            საკვები ობიექტი
+
+                            <select name="food" onchange="func()" id="select">
+                                <option value="{{ info.meal.pk }}" selected hidden>
+                                    {% if info.meal %}
+                                        {{ info.meal }}
+                                    {% else %}
+                                        აირჩიე
+                                    {% endif %}
+                                </option>
+                                {% for option in food %}
+                                    <option value="{{ option.id }}">{{ option.food_item }}</option>
+                                {% endfor %}
+                            </select>
+                        </span>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        <div id="food-choice" class="row justify-content-center">
+                            <a href="#" onclick="custom_food()">დაამატე ახალი</a>
+                        </div>
+
+                        <div hidden id="food-input" class="row justify-content-center">
+                            <input id="input" name="add-food" type="text">
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-5">
+                        <p>დეტალური მენიუ:</p>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+
+                        <textarea name="text" placeholder="შეიყვანეთ ტექსტი..." id="detailinput" rows="3"
+                                  cols="30">{% if info.note %}{{ info.note }}{% endif %}</textarea>
+
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-5">
+                        <div class="form-check">
+                            <input class="form-check-input " type="radio" name="in_or_out" id="exampleRadios1"
+                                   value="in" {% if not info.out %}checked{% endif %}>
+                            <label class="form-check-label" for="exampleRadios1">
+                                გამოძახება
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input m-1" type="radio" name="in_or_out" id="exampleRadios2"
+                                   value="out" {% if info.out %}checked{% endif %}>
+                            <label class="form-check-label" for="exampleRadios2">
+                                გასვლა
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-4">
+                        <div class="form-check form-switch">
+                            <input {% if info.orderer %}checked{% endif %} class="form-check-input" name="checkbox"
+                                   type="checkbox" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">შემიძლია გადახდა</label>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-5 mb-3">
+                        <button class="btn btn-danger" type="submit" name="action" value="submit">დადასტურება
+                        </button>
+                    </div>
+                </form>
+                {% include 'polls/components/clear_query.html' %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

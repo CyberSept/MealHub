@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+    <div class="container">
+        <div class="d-flex flex-wrap justify-content-around">
+            {% for restaurant, users in food.items %}
+
+                <div class="maincontainer">
+                    <div class="card" id="card{{ restaurant.id }}">
+                        <div class="front" id="front{{ restaurant.id }}">
+                            <div class="d-flex justify-content-center mt-4">
+                                {{ users.count }}
+                            </div>
+                            <div class="d-flex justify-content-center mt-2">
+                                {% if users.0.out %}
+                                    <p>გასვლა</p>
+                                {% else %}
+                                    <p>გამოძახება</p>
+                                {% endif %}
+                            </div>
+
+                            <div class="d-flex justify-content-center">
+                                <h3 id="form-title">{{ restaurant }}</h3>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <hr style="width: 200px">
+                            </div>
+                            {% for user in users %}
+                                <div class="d-flex justify-content-center">
+                                    <p>{{ user }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="back">
+                            <div class="d-flex justify-content-center mt-4 mb-3">
+                                <strong>დეტალური მენიუ:</strong>
+                            </div>
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                <input type="hidden" name="food" value="{{ restaurant.id }}"/>
+                                <div class="d-flex justify-content-center">
+
+                                    <textarea style="resize: none;" name="text" placeholder="შეიყვანეთ ტექსტი..."
+                                              id="detailinput" rows="3">{% if info.note and restaurant.id == info.meal_id %}{{ info.note }}{% endif %}</textarea>
+
+                                </div>
+
+                                <div class="d-flex justify-content-center mt-4">
+                                    <div class="form-check form-switch">
+                                        <input {% if info.orderer %}checked{% endif %} class="form-check-input"
+                                               name="checkbox"
+                                               type="checkbox" id="flexSwitchCheckDefault2">
+                                        <label class="form-check-label" for="flexSwitchCheckDefault2">შემიძლია
+                                            გადახდა</label>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-center mt-4">
+                                    <button class="btn btn-danger btn-hungry" id="back_button{{ restaurant.id }}"
+                                            type="button">
+                                        უკან
+                                    </button>
+                                    <button class="btn btn-danger btn-hungry" type="submit" name="out"
+                                            value="{{ users.0.out }}">
+                                        დადასტურება
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+
+
+    <script>
+        {% for restaurant in food %}
+            document.getElementById("front" + "{{ restaurant.id }}").addEventListener('click', () => {
+                document.getElementById("card" + "{{ restaurant.id }}").classList.toggle('flip-card');
+
+            })
+            document.getElementById("back_button" + "{{ restaurant.id }}").addEventListener('click', () => {
+                document.getElementById("card" + "{{ restaurant.id }}").classList.toggle('flip-card');
+            })
+        {% endfor %}
+
+    </script>
+{% endblock %}

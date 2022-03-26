@@ -10,15 +10,19 @@
                 <div class="maincontainer">
                     <div class="card" id="card{{ item.id }}">
                         <div class="front" id="front{{ item.id }}">
-                            <div class="d-flex justify-content-center mt-4">
-                                {{ item.count }}
-                            </div>
-                            <div class="d-flex justify-content-center mt-2">
-                                {% if item.out %}
-                                    <p>გასვლა</p>
-                                {% else %}
-                                    <p>გამოძახება</p>
-                                {% endif %}
+
+                            <div class="d-flex bd-highlight">
+                                <div class="me-auto bd-highlight">
+                                    <p style="font-size: 26px">{{ item.count }}</p>
+                                </div>
+
+                                <div class="ms-auto p-2 bd-highlight">
+                                    {% if item.out %}
+                                        <p>გასვლა</p>
+                                    {% else %}
+                                        <p>გამოძახება</p>
+                                    {% endif %}
+                                </div>
                             </div>
 
                             <div class="d-flex justify-content-center">
@@ -27,14 +31,18 @@
                             <div class="d-flex justify-content-center">
                                 <hr style="width: 200px">
                             </div>
-                            {% for user in item.users %}
-                                <div class="d-flex justify-content-center">
-                                    <p>{{ user }}</p>
-                                </div>
-                            {% endfor %}
+                            <div class="d-flex flex-wrap justify-content-center">
+
+                                {% for user in item.users %}
+
+                                    {{ user }}&nbsp&nbsp
+
+                                {% endfor %}
+
+                            </div>
                         </div>
                         <div class="back">
-                            <div class="d-flex justify-content-center mt-4 mb-3">
+                            <div class="d-flex justify-content-center mt-1 mb-3">
                                 <strong>დეტალური მენიუ:</strong>
                             </div>
                             <form method="POST" action="">
@@ -42,8 +50,9 @@
                                 <input type="hidden" name="food" value="{{ item.meal }}"/>
                                 <div class="d-flex justify-content-center">
 
-                                    <textarea style="resize: none;" name="text" placeholder="შეიყვანეთ ტექსტი..."
-                                              id="detailinput" rows="3">{% if info.note and item.meal == info.meal_id %}{{ info.note }}{% endif %}</textarea>
+                                    <textarea required style="resize: none" name="text"
+                                              placeholder="შეიყვანეთ ტექსტი..." id="detailinput"
+rows="3">{% if info.note and item.meal == info.meal_id and item.out == info.out %}{{ info.note }}{% endif %}</textarea>
 
                                 </div>
 
@@ -80,12 +89,21 @@
 
     <script>
         {% for item in food %}
+            let bla{{ item.id }}bla = document.getElementById("card" + "{{ item.id }}")
             document.getElementById("front" + "{{ item.id }}").addEventListener('click', () => {
-                document.getElementById("card" + "{{ item.id }}").classList.toggle('flip-card');
+                bla{{ item.id }}bla.classList.toggle('flip-card');
+                let bla{{ item.id }}flipped
+                if (bla{{ item.id }}flipped) {
+                    bla{{ item.id }}bla.classList.toggle('flip-card');
+                }
+                bla{{ item.id }}flipped = true
 
             })
+
+            bla{{ item.id }}bla
             document.getElementById("back_button" + "{{ item.id }}").addEventListener('click', () => {
                 document.getElementById("card" + "{{ item.id }}").classList.toggle('flip-card');
+                bla{{ item.id }}flipped = false
             })
         {% endfor %}
 

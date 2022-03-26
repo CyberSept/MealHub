@@ -6,15 +6,17 @@ from polls.models import Food, Poll
 
 
 @login_required(login_url='login')
-def home(request):
-    result = (Poll.objects.values('meal', 'meal__food_item', 'out').annotate(count=Count('meal')).order_by())
+def home(request):                                                                             # count may be optional
+    result = (Poll.objects.values('meal', 'meal__food_item', 'out').annotate(count=Count('meal')).order_by('-count'))
 
     for i, dct in enumerate(result):
         users = Poll.objects.filter(out=dct['out'], meal=dct['meal'])
         dct['users'] = users
         dct['restaurant'] = dct.pop('meal__food_item')
         dct['id'] = i
-
+    print(result)
+    result.order_by('count')
+    print(result)
     if Poll.objects.filter(user=request.user).exists():
         info = Poll.objects.get(user=request.user)
     else:
@@ -36,19 +38,26 @@ def home(request):
     return render(request, 'polls/home.html', context)
 
 
-def random_orderer():
-    food_ids = Poll.objects.values_list('meal', flat=True).distinct()
+def random_orderer(request):
+    result = (Poll.objects.values('meal', 'out').annotate(count=Count('meal')).order_by('-count'))
+    ls = []
+    for dct in result:
+        users = Poll.objects.filter(out=dct['out'], meal=dct['meal'], orderer=True)
+        if users.exists():
+            ls.append(users.order_by('?').first())
 
-    for i in range(len(food_ids)):
-        if Poll.objects.filter(meal=food_ids[i], orderer=True).exists():
-            print(Poll.objects.filter(meal=food_ids[i], orderer=True).order_by('?').first())
-        else:
-            print('error')
+    info = Poll.objects.get(user=request.user)
+    rand = None
+    for i in ls:
+        if i.meal_id == info.meal_id and i.out == info.out:
+           rand = i
+
+    context = {'random': rand, 'info': info}
+    return render(request, 'polls/random.html', context)
 
 
 @login_required(login_url='login')
 def review(request):
-    random_orderer()
     food = Food.objects.all()
 
     if Poll.objects.filter(user=request.user).exists():

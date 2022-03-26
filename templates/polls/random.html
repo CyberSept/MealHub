@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container h-100">
+        <div class="d-flex justify-content-center h-100">
+            <div class="user_card">
+                <div class="d-flex justify-content-center">
+
+                    {% if random %}
+                        <p>გადამხდელი არის &nbsp<strong>{{ random }}</strong></p>
+                    {% else %}
+                        <p>გადამხდელი ვერ აირჩა</p>
+                    {% endif %}
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

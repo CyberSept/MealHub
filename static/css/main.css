@@ -74,13 +74,18 @@ body, html {
     color: #797979;
 }
 
-#messages {
+.messages {
     background-color: rgba(255, 0, 0, 0.1);
     color: #bd182a;
     padding: 10px;
     margin-bottom: 20px;
     text-align: center;
     border-radius: 5px;
+}
+
+.messages-login {
+    background-color: rgba(72, 255, 0, 0.1);
+    color: #0e7c2f;
 }
 
 #detailinput {

@@ -1,38 +1,24 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
 from polls.models import Food, Poll
 
 
 @login_required(login_url='login')
 def home(request):
-    # out_food_ids = Poll.objects.filter(out=True).values_list('meal', flat=True)
-    # in_food_ids = Poll.objects.filter(out=False).values_list('meal', flat=True)
-    #
-    # temp_dict = {}
-    # temp_list = []
-    #
-    # for i in range(len(out_food_ids)):
-    #     # print(Food.objects.get(id=food_ids[i]), Poll.objects.filter(meal=food_ids[i]))
-    #     if Food.objects.get(id=out_food_ids[i]) not in temp_list:
-    #         temp_list.append(Food.objects.get(id=out_food_ids[i]))
-    #         temp_dict[Poll.objects.filter(meal=out_food_ids[i]).filter(out=True).distinct()] = Food.objects.get(
-    #             id=out_food_ids[i])
-    #
-    # temp_list2 = []
-    # for i in range(len(in_food_ids)):
-    #     # print(Food.objects.get(id=food_ids[i]), Poll.objects.filter(meal=food_ids[i]))
-    #     if Food.objects.get(id=out_food_ids[i]) not in temp_list2:
-    #         temp_list2.append(Food.objects.get(id=out_food_ids[i]))
-    #         temp_dict[Poll.objects.filter(meal=in_food_ids[i]).filter(out=False).distinct()] = Food.objects.get(
-    #             id=in_food_ids[i])
+    result = (Poll.objects.values('meal', 'meal__food_item', 'out').annotate(count=Count('meal')).order_by())
 
-    food_dict = {}
-    food_ids = Poll.objects.values_list('meal', flat=True).distinct()
+    for i, dct in enumerate(result):
+        users = Poll.objects.filter(out=dct['out'], meal=dct['meal'])
+        dct['users'] = users
+        dct['restaurant'] = dct.pop('meal__food_item')
+        dct['id'] = i
 
-    for i in range(len(food_ids)):
-        food_dict[Food.objects.get(id=food_ids[i])] = Poll.objects.filter(meal=food_ids[i])
-        print(Poll.objects.filter(meal=food_ids[i], orderer=True))  # orderers lists-------------------------
+    if Poll.objects.filter(user=request.user).exists():
+        info = Poll.objects.get(user=request.user)
+    else:
+        info = None
 
     if request.method == 'POST':
         if request.POST.get('checkbox') == 'on':
@@ -44,18 +30,25 @@ def home(request):
         query = Poll.objects.filter(user=request.user)
         query.update(meal=request.POST.get('food'), note=request.POST.get('text'), orderer=is_paying,
                      out=request.POST.get('out'))
+        return redirect('home')
 
-    if Poll.objects.filter(user=request.user).exists():
-        info = Poll.objects.get(user=request.user)
-    else:
-        info = None
-
-    context = {'food': food_dict, 'info': info}
+    context = {'food': result, 'info': info}
     return render(request, 'polls/home.html', context)
+
+
+def random_orderer():
+    food_ids = Poll.objects.values_list('meal', flat=True).distinct()
+
+    for i in range(len(food_ids)):
+        if Poll.objects.filter(meal=food_ids[i], orderer=True).exists():
+            print(Poll.objects.filter(meal=food_ids[i], orderer=True).order_by('?').first())
+        else:
+            print('error')
 
 
 @login_required(login_url='login')
 def review(request):
+    random_orderer()
     food = Food.objects.all()
 
     if Poll.objects.filter(user=request.user).exists():
@@ -98,6 +91,7 @@ def review(request):
             else:
                 info = Poll.objects.create(user=request.user, meal=users_food, orderer=is_paying, out=in_or_out,
                                            note=note)
+            return redirect('home')
 
     context = {'info': info, 'food': food, 'errors': errors}
     return render(request, 'polls/review.html', context)

@@ -89,23 +89,17 @@ rows="3">{% if info.note and item.meal == info.meal_id and item.out == info.out 
 
     <script>
         {% for item in food %}
-            let bla{{ item.id }}bla = document.getElementById("card" + "{{ item.id }}")
-            document.getElementById("front" + "{{ item.id }}").addEventListener('click', () => {
-                bla{{ item.id }}bla.classList.toggle('flip-card');
-                let bla{{ item.id }}flipped
-                if (bla{{ item.id }}flipped) {
-                    bla{{ item.id }}bla.classList.toggle('flip-card');
-                }
-                bla{{ item.id }}flipped = true
+            let card{{ item.id }} = document.getElementById("card" + "{{ item.id }}")
+            let front{{ item.id }} = document.getElementById("front" + "{{ item.id }}")
+            let back{{ item.id }} = document.getElementById("back_button" + "{{ item.id }}")
 
+            front{{ item.id }}.addEventListener('click', () => {
+                card{{ item.id }}.classList.toggle('flip-card');
             })
 
-            bla{{ item.id }}bla
-            document.getElementById("back_button" + "{{ item.id }}").addEventListener('click', () => {
-                document.getElementById("card" + "{{ item.id }}").classList.toggle('flip-card');
-                bla{{ item.id }}flipped = false
+            back{{ item.id }}.addEventListener('click', () => {
+                card{{ item.id }}.classList.toggle('flip-card');
             })
         {% endfor %}
-
     </script>
 {% endblock %}

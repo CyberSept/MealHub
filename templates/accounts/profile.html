@@ -29,26 +29,64 @@
 
                     </div>
                 {% endif %}
-
-                <div class="d-flex justify-content-center mt-3">
-                    <div class="form-group">
-                        <label class="small mb-1">სახელი:</label>
-                        {{ user_form.username }}
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-center mt-3">
+                        <div class="form-group">
+                            <label class="small mb-1">სახელი:</label>
+                            {{ user_form.username }}
+                        </div>
                     </div>
-                </div>
-                <div class="d-flex justify-content-center mt-4">
+                    <div class="d-flex justify-content-center mt-3">
+                        <button class="btn btn-danger" name="button" value="name" type="submit">შენახვა</button>
+                    </div>
+                </form>
 
-                    <div class="form-group">
+
+                <div class="d-flex justify-content-center mt-4 mb-1">
                         <a href="{% url 'change_password' %}">პაროლის შეცვლა</a>
-                        <hr>
-                        <label class="small mb-1">არასასურველი საკვები:</label>
-
-                    </div>
-
                 </div>
+
+                <hr style="height: 2px">
+
                 <div class="d-flex justify-content-center mt-3">
-                    <button class="btn btn-danger" type="submit">შენახვა</button>
+                        <label class="small mb-1">არასასურველი საკვები:</label>
                 </div>
+
+                <div class="d-flex justify-content-center mt-4">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+
+
+                        <select name="food" onchange="func()" id="select">
+                            <option value="" selected disabled hidden>
+                                აირჩიე
+                            </option>
+                            {% for option in food %}
+                                <option value="{{ option.id }}">{{ option.food_item }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <div class="d-flex justify-content-center mt-4 mb-3">
+                            <button class="btn btn-danger" name="button" value="food" type="submit">დამატება</button>
+                        </div>
+                    </form>
+                </div>
+
+                {% if unwanted %}
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        {% for item in unwanted %}
+                            <div class="d-flex justify-content-center mt-3">
+                                <p class="unwanted_list">{{ item }}</p>
+                                <div style="margin-left: 5px; transform: scale(0.7);">
+                                    <button class="close" name="delete" value="{{ item.id }}"
+                                            aria-label="Close"></button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </form>
+                {% endif %}
 
             </div>
         </div>

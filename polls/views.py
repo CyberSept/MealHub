@@ -6,7 +6,7 @@ from polls.models import Food, Poll
 
 
 @login_required(login_url='login')
-def home(request):                                                                             # count may be optional
+def home(request):  # count may be optional
     result = (Poll.objects.values('meal', 'meal__food_item', 'out').annotate(count=Count('meal')).order_by('-count'))
 
     for i, dct in enumerate(result):
@@ -50,7 +50,7 @@ def random_orderer(request):
     rand = None
     for i in ls:
         if i.meal_id == info.meal_id and i.out == info.out:
-           rand = i
+            rand = i
 
     context = {'random': rand, 'info': info}
     return render(request, 'polls/random.html', context)
@@ -58,7 +58,7 @@ def random_orderer(request):
 
 @login_required(login_url='login')
 def review(request):
-    food = Food.objects.all()
+    food = Food.objects.exclude(hater_user=request.user)
 
     if Poll.objects.filter(user=request.user).exists():
         info = Poll.objects.get(user=request.user)
@@ -91,15 +91,11 @@ def review(request):
 
         if request.POST.get('action') == 'submit' and not errors:
 
-            # info = Poll.objects.update_or_create(user=request.user, meal=users_food, orderer=is_paying,
-            #                                      out=in_or_out, note=note)
-            if Poll.objects.filter(user=request.user).exists():
-                info = Poll.objects.filter(user=request.user)
-                info.update(user=request.user, meal=users_food, orderer=is_paying, out=in_or_out, note=note)
-                info = Poll.objects.get(user=request.user)
-            else:
-                info = Poll.objects.create(user=request.user, meal=users_food, orderer=is_paying, out=in_or_out,
-                                           note=note)
+            if Poll.objects.filter(user_id=request.user.id).exists():
+                Poll.objects.filter(user_id=request.user.id).delete()
+            Poll.objects.create(user=request.user, meal=users_food, orderer=is_paying,
+                                out=in_or_out, note=note)
+
             return redirect('home')
 
     context = {'info': info, 'food': food, 'errors': errors}

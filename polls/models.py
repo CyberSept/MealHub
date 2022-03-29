@@ -3,10 +3,9 @@ from django.db import models
 from accounts.models import UserModel
 
 
-# Create your models here.
-
 class Food(models.Model):
     food_item = models.CharField(max_length=100)
+    hater_user = models.ManyToManyField(UserModel)
 
     def __str__(self):
         return self.food_item

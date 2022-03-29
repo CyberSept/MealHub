@@ -5,13 +5,18 @@ body, html {
     background: rgb(238, 238, 238) !important;
 }
 
+body{
+    /*background-image: url("../images/kor.png");*/
+    /*background-size: cover;*/
+}
+
 .navbar {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .user_card {
     width: 600px;
-    margin-top: 64px;
+    margin-top: 120px;
     margin-bottom: auto;
     background: white;
     position: relative;
@@ -120,7 +125,7 @@ body, html {
 
 
 .maincontainer {
-    margin-top: 64px;
+    margin-top: 120px;
     background-color: transparent;
     width: 300px;
     height: 300px;
@@ -161,4 +166,49 @@ body, html {
     background-color: #ffffff;
     color: #797979;
     transform: rotateY(180deg);
+}
+
+/* big X button*/
+
+
+.close {
+    vertical-align: middle;
+    border: none;
+    color: inherit;
+    border-radius: 50%;
+    background: transparent;
+    position: relative;
+    width: 32px;
+    height: 32px;
+    top: -10%;
+    opacity: 0.6;
+}
+.close:hover {
+    opacity: 1;
+    color: red;
+    background: rgba(128, 128, 128, 0.5);
+}
+.close:active {
+    background: rgba(128, 128, 128, 0.9);
+}
+/* tines of the X */
+.close::before,
+.close::after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 20px;
+    width: 4px;
+    background-color: currentColor;
+}
+.close::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+.close::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.unwanted_list {
+    margin: 0;
 }

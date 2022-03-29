@@ -7,6 +7,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 
 from .forms import CreateUserForm, UpdateUserForm
+from polls.models import Food
 
 
 # Create your views here.
@@ -58,17 +59,30 @@ def logout_user(request):
 
 @login_required(login_url='login')
 def profile_page(request):
+    user_form = UpdateUserForm(instance=request.user)
     if request.method == 'POST':
-        user_form = UpdateUserForm(request.POST, instance=request.user)
+        if request.POST.get('button') == 'name':
+            user_form = UpdateUserForm(request.POST, instance=request.user)
 
-        if user_form.is_valid():
-            user_form.save()
-            messages.success(request, 'Profile has been updated')
-            return redirect('profile')
-    else:
-        user_form = UpdateUserForm(instance=request.user)
+            if user_form.is_valid():
+                user_form.save()
+                messages.success(request, 'Profile has been updated')
+                return redirect('profile')
 
-    context = {'user_form': user_form}
+        elif request.POST.get('button') == 'food':
+
+            if request.POST.get('food'):
+                f = Food.objects.get(id=request.POST.get('food'))
+                f.hater_user.add(request.user)
+                f.save()
+        elif request.POST.get('delete'):
+            f = Food.objects.get(id=request.POST.get('delete'))
+            f.hater_user.remove(request.user)
+            f.save()
+
+    food = Food.objects.exclude(hater_user=request.user)
+    unwanted = Food.objects.filter(hater_user=request.user)
+    context = {'user_form': user_form, 'food': food, 'unwanted': unwanted}
     return render(request, 'accounts/profile.html', context)
 
 

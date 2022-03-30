@@ -4,18 +4,32 @@
     <div class="container h-100">
         <div class="d-flex justify-content-center h-100">
             <div class="user_card">
-                <div class="d-flex justify-content-center">
 
-                    {% if random %}
-                        <p>გადამხდელი არის &nbsp<strong>{{ random }}</strong></p>
+                {% if random %}
+
+                    {% if random.id == info.id %}
+                        <div class="d-flex justify-content-center">
+                            <p>გილოცავ &nbsp<strong>{{ random }}</strong> &#129321; შენ ხარ გადამხდელი</p>
+                        </div>
+                        <div class="d-flex justify-content-center mt-2">
+                            <a href="{% url 'result' %}" class="btn btn-danger">გაგრძელება</a>
+                        </div>
                     {% else %}
-                        <p>გადამხდელი ვერ აირჩა</p>
+                        <div class="d-flex justify-content-center">
+                            <p>გადამხდელი არის &nbsp<strong>{{ random }} &#128511;</strong></p>
+                        </div>
                     {% endif %}
 
-                </div>
-            </div>
+                {% else %}
+                    <div class="d-flex justify-content-center">
+                        <p>გადამხდელი ვერ აირჩა</p>
+                    </div>
+                {% endif %}
 
+            </div>
         </div>
+
+    </div>
     </div>
 
 {% endblock %}

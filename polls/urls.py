@@ -6,4 +6,6 @@ urlpatterns = [
     path('review/', views.review, name='review'),
     path('clear/', views.clear, name='clear'),
     path('random/', views.random_orderer, name='random'),
+    path('result/', views.result_page, name='result'),
+
 ]

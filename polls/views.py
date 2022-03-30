@@ -56,6 +56,10 @@ def random_orderer(request):
     return render(request, 'polls/random.html', context)
 
 
+def result_page(request):
+    return render(request, 'polls/result.html')
+
+
 @login_required(login_url='login')
 def review(request):
     food = Food.objects.exclude(hater_user=request.user)

@@ -14,9 +14,7 @@ def home(request):  # count may be optional
         dct['users'] = users
         dct['restaurant'] = dct.pop('meal__food_item')
         dct['id'] = i
-    print(result)
     result.order_by('count')
-    print(result)
     if Poll.objects.filter(user=request.user).exists():
         info = Poll.objects.get(user=request.user)
     else:
@@ -56,8 +54,20 @@ def random_orderer(request):
     return render(request, 'polls/random.html', context)
 
 
-def result_page(request):
-    return render(request, 'polls/result.html')
+def result_page(request):  ### needs to be corrected something!!
+    result = (Poll.objects.values('meal', 'out').annotate(count=Count('meal')).order_by())
+    ls = []
+    for i in result:
+        users = Poll.objects.filter(out=i['out'], meal=i['meal'])
+        ls.append(users)
+
+    info = Poll.objects.get(user=request.user)
+    for i in ls:
+        if i[0].meal_id == info.meal_id and i[0].out == info.out:
+            menus = i
+
+    context = {'info': menus}
+    return render(request, 'polls/result.html', context)
 
 
 @login_required(login_url='login')

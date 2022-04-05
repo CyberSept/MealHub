@@ -13,8 +13,12 @@ services:
       - pgdb
   pgdb:
     image: postgres
+    volumes:
+      - data:/var/lib/postgresql/data
     container_name: pgdb
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+volumes:
+  data:
